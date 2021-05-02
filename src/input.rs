@@ -122,8 +122,8 @@ pub fn print_help() {
         ))
     );
     println!("Made by Philipp Schuster <phip1611@gmail.com>");
-    println!("See - https://crates.io/crates/{} or", CRATE_NAME);
-    println!("      {}", CRATE_URL);
+    println!("See: - https://crates.io/crates/{} or", CRATE_NAME);
+    println!("     - {}", CRATE_URL);
     println!("----------------------------------------------------");
     println!("{}", Style::default().bold().paint("SYNOPSIS:"));
     println!(
@@ -205,6 +205,16 @@ pub fn print_help() {
     println!("  hex:          {}", EscapeStyle::Hex.help_text());
     println!("  unicode     : {}", EscapeStyle::Unicode.help_text());
     println!("  unicode-rust: {}", EscapeStyle::UnicodeRust.help_text());
+
+    println!();
+    println!("{}", Style::default().bold().paint("FAQ/TROUBLESHOOTING:"));
+    println!("\
+        ⚠️ Your Terminal app may uses a theme that doesn't follow the convention/specification \n\
+        for ANSI escape sequences and the corresponding colors. See \n\
+        https://handwiki.org/wiki/ANSI_escape_code#Colors for example. There nothing that this \n\
+        utility can do in these cases to prevent \"wrong colors\" by \"non standard\" themes.
+        "
+    );
 }
 
 #[cfg(test)]

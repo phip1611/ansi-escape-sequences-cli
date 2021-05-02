@@ -91,3 +91,9 @@ ESCAPE STYLES
   unicode     : Many tools allow unicode values in the following notation: `\u001b`, i.e. an escaped version of `ESC` code.
   unicode-rust: Rust uses unicode in the following form: `\u{1b}`, i.e. an escaped version of `ESC` code.
 ```
+
+## FAQ/Troubleshooting
+### red is not red, blue is not blue
+Your Terminal app may uses a theme that doesn't follow the convention/specification for ANSI escape sequences
+and the corresponding colors. See https://handwiki.org/wiki/ANSI_escape_code#Colors for example. There nothing
+that this utility can do in these cases to prevent "wrong colors" by "non standard" themes.
