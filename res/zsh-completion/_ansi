@@ -8,8 +8,8 @@ __ansi() {
     commands=(
         '-h:--help|help: Show version + list of command-line options]'
         '-n:--new-line: add new line character to output (default: false)]'
-        "-e:--no-escape: don't ASCII-escape output, i.e. return real ASCII value of 'ESC' instead of '\\e' (default: false)]"
-        "-s:--escape-style: only useful if '-e' is NOT provided: style of the ASCII string escape format"
+        "-e:--no-escape: don't escape 'ESC'-character, i.e. return the real ASCII value of `ESC` instead of `\\e` (default: false)]"
+        "-s:--escape-style: only useful if '-e' is NOT provided: style of the `ESC`-character-escaping"
         'reset:reset the font attributes'
         'black:black font'
         'bg-black:black background'

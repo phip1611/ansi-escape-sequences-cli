@@ -24,7 +24,7 @@ test.sh
 ```bash
 # with "-e" we can prevent unnecessary ASCII-escaping of the "ESC" symbol
 # otherwise it can happen that your shell script outputs 
-# "Foo=\e[31mbar" instead of the colored output you wanted
+# "Foo=\e[31mbar" instead of the colored/styled output you wanted
 reset=$(ansi -e reset)
 red=$(ansi -e red)
 echo "Foo=${red}bar"
@@ -44,7 +44,7 @@ https://unix.stackexchange.com/questions/269077/tput-setaf-color-table-how-to-de
 ![Image of colorful help page, text version is below](help.png "Image of colorful help page, text version is below")
 *1:1 copy of "help"-page*
 ```text
-ANSI-ESCAPE-SEQUENCES-CLI ('ansi') @ version 0.1.0
+ANSI-ESCAPE-SEQUENCES-CLI ('ansi') @ version 0.1.1
 Made by Philipp Schuster <phip1611@gmail.com>
 See - https://crates.io/crates/ansi-escape-sequences-cli or
       https://github.com/phip1611/ansi-escape-sequences-cli
@@ -55,12 +55,12 @@ SYNOPSIS:
       [-s|--escape-style bash|unicode|unicode-rust|hex]
 PARAMETERS:
   -n: add new line character to output (default: false)
-  -e: don't ASCII-escape output, i.e. it will return real ASCII value of `ESC` instead of `\e`
-  -s: only useful if `-e` is NOT provided: style of the ASCII string escape format
+  -e: don't escape 'ESC'-symbol, i.e. return the real ASCII value of `ESC` instead of `\e`
+  -s: only useful if `-e` is NOT provided: style of the `ESC`-character-escaping
 COMMANDS:
   For a full list visit: https://crates.io/crates/ansi-escape-sequences-cli
   The most basic ones are all supported. For example:
-    clear/reset
+    reset
     black
     bg-black
     red
@@ -86,9 +86,8 @@ COMMANDS:
     hidden (hidden)
     strike | strikethrough
 ESCAPE STYLES
-  bash:         Bash (and many other tools) support `\e` that gets replaced by ASCIIs `ESC` code.
-  hex:          Many tools allow hex values in the following notation: `\x1b`, i.e. ASCIIs `ESC` code.
-  unicode     : Many tools allow unicode values in the following notation: `\u001b`, i.e. ASCIIs `ESC` code.
-  unicode-rust: Rust uses unicode in the following form: `\u{1b}`, i.e. ASCIIs `ESC` code.
-
+  bash:         Bash (and many other tools) support `\e` as escaped version of `ESC` code
+  hex:          Many tools allow hex values in the following notation: `\x1b`, i.e. an escaped version of `ESC` code.
+  unicode     : Many tools allow unicode values in the following notation: `\u001b`, i.e. an escaped version of `ESC` code.
+  unicode-rust: Rust uses unicode in the following form: `\u{1b}`, i.e. an escaped version of `ESC` code.
 ```

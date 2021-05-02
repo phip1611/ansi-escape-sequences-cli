@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-//! A CLI utility installed as "ansi" to quickly get ASCII escape sequences. Supports the most basic
+//! A CLI utility installed as "ansi" to quickly get ANSI escape sequences. Supports the most basic
 //! ones, like colors and styles as bold or italic. The lifecycle of this utility usually is really
 //! short, rather it is invoked often/multiple times. It can be used like this:
 //! `$ echo "$(ansi bg-green)Hello World $(ansi reset)$(ansi red)$(ansi bold)$(ansi underline)Red Warning$(ansi reset)"`
@@ -62,12 +62,12 @@ impl EscapeStyle {
     /// of `ESC`. Normally we don't want this but an escaped version of the `ESC`-later using
     /// regular characters.
     fn escape_esc_character(&self, escape_sequence: String) -> String {
-        const ASCII_ESCAPE: &str = "\u{1b}";
+        const ASCII_ESC_KEY_CODE: &str = "\u{1b}";
         match self {
-            EscapeStyle::UnicodeRust => escape_sequence.replace(ASCII_ESCAPE, "\\u{1b}"),
-            EscapeStyle::Unicode => escape_sequence.replace(ASCII_ESCAPE, "\\u001b"),
-            EscapeStyle::Bash => escape_sequence.replace(ASCII_ESCAPE, "\\e"),
-            EscapeStyle::Hex => escape_sequence.replace(ASCII_ESCAPE, "\\x1b"),
+            EscapeStyle::UnicodeRust => escape_sequence.replace(ASCII_ESC_KEY_CODE, "\\u{1b}"),
+            EscapeStyle::Unicode => escape_sequence.replace(ASCII_ESC_KEY_CODE, "\\u001b"),
+            EscapeStyle::Bash => escape_sequence.replace(ASCII_ESC_KEY_CODE, "\\e"),
+            EscapeStyle::Hex => escape_sequence.replace(ASCII_ESC_KEY_CODE, "\\x1b"),
         }
     }
 }
@@ -130,7 +130,7 @@ pub fn command_to_escape_code(cmd: &str) -> String {
     }
 }
 
-/// A CLI utility installed as "ansi" to quickly get ASCII escape sequences. Supports the most basic
+/// A CLI utility installed as "ansi" to quickly get ANSI escape sequences. Supports the most basic
 /// ones, like colors and styles as bold or italic. The lifecycle of this utility usually is really
 /// short, rather it is invoked often/multiple times. It can be used like this:
 /// `$ echo "$(ansi bg-green)Hello World $(ansi reset)$(ansi red)$(ansi bold)$(ansi underline)Red Warning$(ansi reset)"`
@@ -146,7 +146,7 @@ fn main() {
     } else {
         let escape_sequence = command_to_escape_code(&cmd);
 
-        if !params.no_ascii_escape() {
+        if !params.no_esc_escape() {
             print!("{}", params.escape_style().escape_esc_character(escape_sequence));
         } else {
             print!("{}", escape_sequence);

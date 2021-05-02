@@ -39,8 +39,8 @@ pub struct Parameters {
     new_line: bool,
     /// Don't escape ESC-symbol, i.e. directly write the ASCII-code of `ESC` to the response
     /// instead of `"\e"` for example. (default: false).
-    no_ascii_escape: bool,
-    /// Only used if [`no_ascii_escape`] is false. Determines the output style of the special
+    no_esc_escape: bool,
+    /// Only used if [`no_esc_escape`] is false. Determines the output style of the special
     /// `ESC` char. See [`crate::EscapeStyle`].
     escape_style: EscapeStyle,
 }
@@ -49,8 +49,8 @@ impl Parameters {
     pub fn new_line(&self) -> bool {
         self.new_line
     }
-    pub fn no_ascii_escape(&self) -> bool {
-        self.no_ascii_escape
+    pub fn no_esc_escape(&self) -> bool {
+        self.no_esc_escape
     }
     pub fn escape_style(&self) -> EscapeStyle {
         self.escape_style
@@ -61,7 +61,7 @@ impl Default for Parameters {
     fn default() -> Self {
         Self {
             new_line: false,
-            no_ascii_escape: false,
+            no_esc_escape: false,
             escape_style: EscapeStyle::default(),
         }
     }
@@ -85,7 +85,7 @@ pub fn analyze_args(args: &[&str]) -> Option<(Parameters, String)> {
         if arg.starts_with("--") || arg.starts_with("-") {
             match arg {
                 "-n" | "--new-line" => params.new_line = true,
-                "-e" | "--no-escape" => params.no_ascii_escape = true,
+                "-e" | "--no-escape" => params.no_esc_escape = true,
                 "-s" | "--escape-style" => {
                     params.escape_style =
                         EscapeStyle::from_str(maybe_next_arg.expect("Must provide escape style"))
@@ -139,8 +139,8 @@ pub fn print_help() {
 
     println!("{}", Style::default().bold().paint("PARAMETERS:"));
     println!("  -n: add new line character to output (default: false)");
-    println!("  -e: don't ASCII-escape output, i.e. it will return real ASCII value of `ESC` instead of `\\e`");
-    println!("  -s: only useful if `-e` is NOT provided: style of the ASCII string escape format");
+    println!("  -e: don't escape 'ESC'-symbol, i.e. return the real ASCII value of `ESC` instead of `\\e`");
+    println!("  -s: only useful if `-e` is NOT provided: style of the `ESC`-character-escaping");
 
     println!("{}", Style::default().bold().paint("COMMANDS:"));
     println!(
@@ -218,7 +218,7 @@ mod tests {
         let args = ["ansi", "red"];
         let (actual_params_1, actual_cmd_1) = analyze_args(&args).expect("Must be valid");
         assert_eq!(actual_params_1.new_line(), false);
-        assert_eq!(actual_params_1.no_ascii_escape(), false);
+        assert_eq!(actual_params_1.no_esc_escape(), false);
         assert_eq!(actual_params_1.escape_style(), EscapeStyle::default());
         assert_eq!(actual_cmd_1, "red");
     }
@@ -245,7 +245,7 @@ mod tests {
         let args = ["ansi", "red", "-n", "--escape-style", "unicode-rust"];
         let (actual_params_1, actual_cmd_1) = analyze_args(&args).expect("Must be valid");
         assert_eq!(actual_params_1.new_line(), true);
-        assert_eq!(actual_params_1.no_ascii_escape(), false);
+        assert_eq!(actual_params_1.no_esc_escape(), false);
         assert_eq!(actual_params_1.escape_style(), EscapeStyle::UnicodeRust);
         assert_eq!(actual_cmd_1, "red");
     }
