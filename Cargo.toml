@@ -4,7 +4,7 @@ description = """
 A CLI utility installed as "ansi" to quickly get ANSI escape sequences. Supports the most basic ones,
 like colors and styles as bold or italic.
 """
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Philipp Schuster <phip1611@gmail.com>"]
 edition = "2018"
 keywords = ["ansi", "vt100", "escape-sequences", "terminal"]

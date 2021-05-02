@@ -9,7 +9,7 @@ which can be used on the Terminal to easily colorize/style your output.
 Explanation:
 1) returns the sequence in a "regular characters only"-form (for copy & paste),
    i.e. the `ESC`-code is escaped
-2) same, but see on the byte-level
+2) same, but seen on the byte-level
 3) returns the ESC-code directly, unescaped (harder to copy%paste)
 ![what output looks like](what_it_returns.png "what output looks like")
 
