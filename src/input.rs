@@ -1,9 +1,8 @@
 //! Module for parsing CLI input/arguments.
 
 use crate::EscapeStyle;
-use std::slice::Iter;
+use ansi_term::{Colour, Style};
 use std::str::FromStr;
-use ansi_term::{Style, Colour};
 
 // env!: inspects an environment variable at compile time
 const CRATE_NAME: &'static str = env!("CARGO_PKG_NAME");
@@ -61,21 +60,17 @@ pub fn analyze_args(args: &[&str]) -> Option<(Parameters, String)> {
         let maybe_next_arg = args.get(i + 1);
         if arg.starts_with("--") || arg.starts_with("-") {
             match arg {
-                "-n" | "--new-line" => {
-                    params.new_line = true
-                }
-                "-e" | "--no-escape" => {
-                    params.no_ascii_escape = true
-                }
+                "-n" | "--new-line" => params.new_line = true,
+                "-e" | "--no-escape" => params.no_ascii_escape = true,
                 "-s" | "--escape-style" => {
-                    params.escape_style = EscapeStyle::from_str(
-                        maybe_next_arg.expect("Must provide escape style")
-                    ).expect("You must provide an valid escape style. Type '--help' for assistance.");
+                    params.escape_style =
+                        EscapeStyle::from_str(maybe_next_arg.expect("Must provide escape style"))
+                            .expect(
+                            "You must provide an valid escape style. Type '--help' for assistance.",
+                        );
                     i += 1;
-                },
-                "-h" | "--help" => {
-                    cmd = Some("help")
                 }
+                "-h" | "--help" => cmd = Some("help"),
                 _ => panic!("Unknown parameter '{}'! Type '--help' for assistance.", arg),
             }
         } else if cmd.is_none() {
@@ -89,49 +84,81 @@ pub fn analyze_args(args: &[&str]) -> Option<(Parameters, String)> {
 
     Some((
         params,
-        cmd.expect("Provided no argument/command! Type '--help' for assistance.").to_string()
+        cmd.expect("Provided no argument/command! Type '--help' for assistance.")
+            .to_string(),
     ))
 }
 
 pub fn print_help() {
-    println!("{}", Colour::Green.bold().paint(format!("{} ('ansi') @ version {}", CRATE_NAME, CRATE_VERSION)));
+    println!(
+        "{}",
+        Colour::Green.bold().paint(format!(
+            "{} ('ansi') @ version {}",
+            CRATE_NAME, CRATE_VERSION
+        ))
+    );
     println!("----------------------------------------------------");
     println!("{}", Style::default().bold().paint("SYNOPSIS:"));
-    println!(" ansi {}|help|{}|{}|{}|{}|... ",
-             Colour::Red.paint("red"),
-             Colour::Green.paint("green"),
-             Style::default().bold().paint("bold"),
-             Style::default().strikethrough().paint("strike"),
-             Style::default().on(Colour::Cyan).paint("bg-cyan"),
+    println!(
+        " ansi {}|help|{}|{}|{}|{}|... ",
+        Colour::Red.paint("red"),
+        Colour::Green.paint("green"),
+        Style::default().bold().paint("bold"),
+        Style::default().strikethrough().paint("strike"),
+        Style::default().on(Colour::Cyan).paint("bg-cyan"),
     );
     println!("      [-n|--new-line] [-e|--no-escape] [-h|--help]");
     println!("      [-s|--escape-style bash|unicode|unicode-rust|hex]");
 
-    println!("{}", Style::default().bold().paint("Parameters:"));
+    println!("{}", Style::default().bold().paint("PARAMETERS:"));
     println!("  -n: add new line character to output (default: false)");
     println!("  -e: don't ASCII-escape output, i.e. it will return real ASCII value of `ESC` instead of `\\e");
     println!("  -s: only useful if `-e` is NOT provided: style of the ASCII string escape format");
 
-    println!("{}", Style::default().bold().paint("Commands:"));
-    println!("  For a full list visit: https://crates.io/crates/{}", CRATE_NAME);
+    println!("{}", Style::default().bold().paint("COMMANDS:"));
+    println!(
+        "  For a full list visit: https://crates.io/crates/{}",
+        CRATE_NAME
+    );
     println!("  The most basic ones are all supported. For example:");
     println!("    clear/reset");
     println!("    {}", Style::default().fg(Colour::Black).paint("black"));
-    println!("    {}", Style::default().on(Colour::Black).paint("bg-black"));
+    println!(
+        "    {}",
+        Style::default().on(Colour::Black).paint("bg-black")
+    );
     println!("    {}", Style::default().fg(Colour::Red).paint("red"));
     println!("    {}", Style::default().on(Colour::Red).paint("bg-red"));
     println!("    {}", Style::default().fg(Colour::Green).paint("green"));
-    println!("    {}", Style::default().on(Colour::Green).paint("bg-green"));
-    println!("    {}", Style::default().fg(Colour::Yellow).paint("yellow"));
-    println!("    {}", Style::default().on(Colour::Yellow).paint("bg-yellow"));
+    println!(
+        "    {}",
+        Style::default().on(Colour::Green).paint("bg-green")
+    );
+    println!(
+        "    {}",
+        Style::default().fg(Colour::Yellow).paint("yellow")
+    );
+    println!(
+        "    {}",
+        Style::default().on(Colour::Yellow).paint("bg-yellow")
+    );
     println!("    {}", Style::default().fg(Colour::Blue).paint("blue"));
     println!("    {}", Style::default().on(Colour::Blue).paint("bg-blue"));
-    println!("    {}", Style::default().fg(Colour::Purple).paint("purple"));
-    println!("    {}", Style::default().on(Colour::Purple).paint("bg-purple"));
+    println!(
+        "    {}",
+        Style::default().fg(Colour::Purple).paint("purple")
+    );
+    println!(
+        "    {}",
+        Style::default().on(Colour::Purple).paint("bg-purple")
+    );
     println!("    {}", Style::default().fg(Colour::Cyan).paint("cyan"));
     println!("    {}", Style::default().on(Colour::Cyan).paint("bg-cyan"));
     println!("    {}", Style::default().fg(Colour::White).paint("white"));
-    println!("    {}", Style::default().on(Colour::White).paint("bg-white"));
+    println!(
+        "    {}",
+        Style::default().on(Colour::White).paint("bg-white")
+    );
     println!("    normal");
     println!("    {}", Style::default().bold().paint("bold"));
     println!("    {}", Style::default().dimmed().paint("dimmed"));
@@ -139,7 +166,18 @@ pub fn print_help() {
     println!("    {}", Style::default().underline().paint("underline"));
     println!("    {}", Style::default().blink().paint("blink"));
     println!("    {} (hidden)", Style::default().hidden().paint("hidden"));
-    println!("    {}", Style::default().strikethrough().paint("strike | strikethrough"));
+    println!(
+        "    {}",
+        Style::default()
+            .strikethrough()
+            .paint("strike | strikethrough")
+    );
+
+    println!("{}", Style::default().bold().paint("ESCAPE STYLES"));
+    println!("  bash:         {}", EscapeStyle::Bash.help_text());
+    println!("  hex:          {}", EscapeStyle::Hex.help_text());
+    println!("  unicode     : {}", EscapeStyle::Unicode.help_text());
+    println!("  unicode-rust: {}", EscapeStyle::UnicodeRust.help_text());
 }
 
 #[cfg(test)]
@@ -184,5 +222,4 @@ mod tests {
         assert_eq!(actual_params_1.escape_style(), EscapeStyle::UnicodeRust);
         assert_eq!(actual_cmd_1, "red");
     }
-
 }

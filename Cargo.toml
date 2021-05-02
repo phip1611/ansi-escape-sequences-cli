@@ -1,5 +1,9 @@
 [package]
 name = "ansi-escape-sequences-cli"
+description = """
+A CLI utility installed as "ansi" to quickly get ASCII escape sequences. Supports the most basic ones,
+like colors and styles as bold or italic.
+"""
 version = "0.1.0"
 authors = ["Philipp Schuster <phip1611@gmail.com>"]
 edition = "2018"
