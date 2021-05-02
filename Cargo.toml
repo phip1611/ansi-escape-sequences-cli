@@ -7,6 +7,21 @@ like colors and styles as bold or italic.
 version = "0.1.0"
 authors = ["Philipp Schuster <phip1611@gmail.com>"]
 edition = "2018"
+keywords = ["ansi", "vt100", "escape-sequences", "terminal"]
+categories = [ "command-line-utilities" ]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/phip1611/ansi-escape-sequences-cli"
+repository = "https://github.com/phip1611/ansi-escape-sequences-cli"
+documentation = "https://docs.rs/ansi-escape-sequences-cli"
+include = [
+    "src/**/*",
+    "Cargo.toml",
+    "Cargo.lock",
+    "README.md",
+    "LICSNESE",
+    "res"
+]
 
 [[bin]]
 name = "ansi"

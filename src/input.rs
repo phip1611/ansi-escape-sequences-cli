@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2021 Philipp Schuster
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 //! Module for parsing CLI input/arguments.
 
 use crate::EscapeStyle;
@@ -5,8 +28,9 @@ use ansi_term::{Colour, Style};
 use std::str::FromStr;
 
 // env!: inspects an environment variable at compile time
-const CRATE_NAME: &'static str = env!("CARGO_PKG_NAME");
 const CRATE_VERSION: &'static str = env!("CARGO_PKG_VERSION");
+const CRATE_NAME: &'static str = env!("CARGO_PKG_NAME");
+const CRATE_URL: &'static str = env!("CARGO_PKG_REPOSITORY");
 
 /// All parameters that can affect the behaviour of this CLI.
 #[derive(Debug, Eq, PartialEq)]
@@ -94,13 +118,16 @@ pub fn print_help() {
         "{}",
         Colour::Green.bold().paint(format!(
             "{} ('ansi') @ version {}",
-            CRATE_NAME, CRATE_VERSION
+            CRATE_NAME.to_ascii_uppercase(), CRATE_VERSION
         ))
     );
+    println!("Made by Philipp Schuster <phip1611@gmail.com>");
+    println!("See - https://crates.io/crates/{} or", CRATE_NAME);
+    println!("      {}", CRATE_URL);
     println!("----------------------------------------------------");
     println!("{}", Style::default().bold().paint("SYNOPSIS:"));
     println!(
-        " ansi {}|help|{}|{}|{}|{}|... ",
+        " ansi {}|{}|{}|{}|{}|... ",
         Colour::Red.paint("red"),
         Colour::Green.paint("green"),
         Style::default().bold().paint("bold"),
@@ -112,7 +139,7 @@ pub fn print_help() {
 
     println!("{}", Style::default().bold().paint("PARAMETERS:"));
     println!("  -n: add new line character to output (default: false)");
-    println!("  -e: don't ASCII-escape output, i.e. it will return real ASCII value of `ESC` instead of `\\e");
+    println!("  -e: don't ASCII-escape output, i.e. it will return real ASCII value of `ESC` instead of `\\e`");
     println!("  -s: only useful if `-e` is NOT provided: style of the ASCII string escape format");
 
     println!("{}", Style::default().bold().paint("COMMANDS:"));
@@ -121,7 +148,7 @@ pub fn print_help() {
         CRATE_NAME
     );
     println!("  The most basic ones are all supported. For example:");
-    println!("    clear/reset");
+    println!("    reset");
     println!("    {}", Style::default().fg(Colour::Black).paint("black"));
     println!(
         "    {}",
