@@ -37,7 +37,7 @@ const CRATE_URL: &'static str = env!("CARGO_PKG_REPOSITORY");
 pub struct Parameters {
     /// Add a trailing new-line character (`\n`) to the command output (default: false).
     new_line: bool,
-    /// Don't ASCII-escape ESCAPE-symbol, i.e. directly write the ASCII-code of `ESC` to the response
+    /// Don't escape ESC-symbol, i.e. directly write the ASCII-code of `ESC` to the response
     /// instead of `"\e"` for example. (default: false).
     no_ascii_escape: bool,
     /// Only used if [`no_ascii_escape`] is false. Determines the output style of the special

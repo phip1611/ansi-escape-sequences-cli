@@ -36,37 +36,38 @@ use std::str::FromStr;
 /// Determines how the special `ESC`-character gets ASCII-encoded before printed to stdout.
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub enum EscapeStyle {
-    /// Bash (and many other tools) support `\e` that gets replaced by ASCIIs `ESC` code.
+    /// Bash (and many other tools) support `\e` as escaped version of `ESC` code.
     Bash,
-    /// Many tools allow hex values in the following notation: `\x1b`, i.e. ASCIIs `ESC` code.
+    /// Many tools allow hex values in the following notation: `\x1b`, i.e. an escaped version of `ESC` code.
     Hex,
-    /// Many tools allow unicode values in the following notation: `\u001b`, i.e. ASCIIs `ESC` code.
+    /// Many tools allow unicode values in the following notation: `\u001b`, i.e. an escaped version of `ESC` code.
     Unicode,
-    /// Rust uses unicode in the following form: `\u{1b}`, i.e. ASCIIs `ESC` code.
+    /// Rust uses unicode in the following form: `\u{1b}`, i.e. an escaped version of `ESC` code.
     UnicodeRust,
 }
 
 impl EscapeStyle {
-    /// When we get the escape sequence from `ansi_term` it is not escaped, i.e. the ASCII
-    /// value of `ESC` is directly inside the data. Here we asciify it again to make it
-    /// copy&pasteable..
-    fn asciify(&self, escape_sequence: String) -> String {
+
+    /// Help test for each variant.
+    fn help_text(&self) -> &str {
+        match self {
+            EscapeStyle::Bash => "Bash (and many other tools) support `\\e` as escaped version of `ESC` code",
+            EscapeStyle::Hex => "Many tools allow hex values in the following notation: `\\x1b`, i.e. an escaped version of `ESC` code.",
+            EscapeStyle::Unicode => "Many tools allow unicode values in the following notation: `\\u001b`, i.e. an escaped version of `ESC` code.",
+            EscapeStyle::UnicodeRust => "Rust uses unicode in the following form: `\\u{1b}`, i.e. an escaped version of `ESC` code.",
+        }
+    }
+
+    /// When we get the escape sequence from `ansi_term` it directly contains the ASCII value
+    /// of `ESC`. Normally we don't want this but an escaped version of the `ESC`-later using
+    /// regular characters.
+    fn escape_esc_character(&self, escape_sequence: String) -> String {
         const ASCII_ESCAPE: &str = "\u{1b}";
         match self {
             EscapeStyle::UnicodeRust => escape_sequence.replace(ASCII_ESCAPE, "\\u{1b}"),
             EscapeStyle::Unicode => escape_sequence.replace(ASCII_ESCAPE, "\\u001b"),
             EscapeStyle::Bash => escape_sequence.replace(ASCII_ESCAPE, "\\e"),
             EscapeStyle::Hex => escape_sequence.replace(ASCII_ESCAPE, "\\x1b"),
-        }
-    }
-
-    /// Help test for each variant.
-    fn help_text(&self) -> &str {
-        match self {
-            EscapeStyle::Bash => "Bash (and many other tools) support `\\e` that gets replaced by ASCIIs `ESC` code.",
-            EscapeStyle::Hex => "Many tools allow hex values in the following notation: `\\x1b`, i.e. ASCIIs `ESC` code.",
-            EscapeStyle::Unicode => "Many tools allow unicode values in the following notation: `\\u001b`, i.e. ASCIIs `ESC` code.",
-            EscapeStyle::UnicodeRust => "Rust uses unicode in the following form: `\\u{1b}`, i.e. ASCIIs `ESC` code.",
         }
     }
 }
@@ -146,7 +147,7 @@ fn main() {
         let escape_sequence = command_to_escape_code(&cmd);
 
         if !params.no_ascii_escape() {
-            print!("{}", params.escape_style().asciify(escape_sequence));
+            print!("{}", params.escape_style().escape_esc_character(escape_sequence));
         } else {
             print!("{}", escape_sequence);
         }

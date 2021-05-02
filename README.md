@@ -5,6 +5,15 @@ which can be used on the Terminal to easily colorize/style your output.
 ## Install
 `$ cargo install ansi-escape-sequences-cli` (the binary is just called `ansi`!)
 
+## What it returns (you can copy&paste the value!)
+Explanation:
+1) returns the sequence in a "regular characters only"-form (for copy & paste),
+   i.e. the `ESC`-code is escaped
+2) same, but see on the byte-level
+3) returns the ESC-code directly, unescaped (harder to copy%paste)
+![what output looks like](what_it_returns.png "what output looks like")
+
+
 ## Usage example 1: in Terminal
 `$ echo "$(ansi bg-purple)Hello World $(ansi reset)$(ansi red)$(ansi bold)$(ansi underline)Red Warning$(ansi reset)"` 
 
@@ -25,6 +34,11 @@ echo "Bar=${reset}foo"
 ## zsh auto completion file
 In `res/zsh-completion/_ansi` is a completion file. Install it for example into
 `/usr/local/share/zsh/site-functions/`.
+
+## How does it differ from `tput`?
+It is simpler and you can use color names like `green` and `red`.
+In `tput` you need to know the color indices, like here:
+https://unix.stackexchange.com/questions/269077/tput-setaf-color-table-how-to-determine-color-codes
 
 ## Options/Parameters
 ![Image of colorful help page, text version is below](help.png "Image of colorful help page, text version is below")
