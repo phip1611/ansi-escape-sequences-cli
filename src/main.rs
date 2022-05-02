@@ -47,7 +47,6 @@ pub enum EscapeStyle {
 }
 
 impl EscapeStyle {
-
     /// Help test for each variant.
     fn help_text(&self) -> &str {
         match self {
@@ -147,7 +146,10 @@ fn main() {
         let escape_sequence = command_to_escape_code(&cmd);
 
         if !params.no_esc_escape() {
-            print!("{}", params.escape_style().escape_esc_character(escape_sequence));
+            print!(
+                "{}",
+                params.escape_style().escape_esc_character(escape_sequence)
+            );
         } else {
             print!("{}", escape_sequence);
         }

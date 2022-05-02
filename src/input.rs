@@ -28,12 +28,12 @@ use ansi_term::{Colour, Style};
 use std::str::FromStr;
 
 // env!: inspects an environment variable at compile time
-const CRATE_VERSION: &'static str = env!("CARGO_PKG_VERSION");
-const CRATE_NAME: &'static str = env!("CARGO_PKG_NAME");
-const CRATE_URL: &'static str = env!("CARGO_PKG_REPOSITORY");
+const CRATE_VERSION: &str = env!("CARGO_PKG_VERSION");
+const CRATE_NAME: &str = env!("CARGO_PKG_NAME");
+const CRATE_URL: &str = env!("CARGO_PKG_REPOSITORY");
 
 /// All parameters that can affect the behaviour of this CLI.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Default)]
 pub struct Parameters {
     /// Add a trailing new-line character (`\n`) to the command output (default: false).
     new_line: bool,
@@ -57,7 +57,7 @@ impl Parameters {
     }
 }
 
-impl Default for Parameters {
+/*impl Default for Parameters {
     fn default() -> Self {
         Self {
             new_line: false,
@@ -65,7 +65,7 @@ impl Default for Parameters {
             escape_style: EscapeStyle::default(),
         }
     }
-}
+}*/
 
 /// Analyzes the provided args and returns a tuple of
 /// * the parameters,
@@ -82,7 +82,7 @@ pub fn analyze_args(args: &[&str]) -> Option<(Parameters, String)> {
     while i < args.len() {
         let arg = args[i];
         let maybe_next_arg = args.get(i + 1);
-        if arg.starts_with("--") || arg.starts_with("-") {
+        if arg.starts_with("--") || arg.starts_with('-') {
             match arg {
                 "-n" | "--new-line" => params.new_line = true,
                 "-e" | "--no-escape" => params.no_esc_escape = true,
@@ -118,7 +118,8 @@ pub fn print_help() {
         "{}",
         Colour::Green.bold().paint(format!(
             "{} ('ansi') @ version {}",
-            CRATE_NAME.to_ascii_uppercase(), CRATE_VERSION
+            CRATE_NAME.to_ascii_uppercase(),
+            CRATE_VERSION
         ))
     );
     println!("Made by Philipp Schuster <phip1611@gmail.com>");
@@ -208,7 +209,8 @@ pub fn print_help() {
 
     println!();
     println!("{}", Style::default().bold().paint("FAQ/TROUBLESHOOTING:"));
-    println!("\
+    println!(
+        "\
         ⚠️ Your Terminal app may uses a theme that doesn't follow the convention/specification \n\
         for ANSI escape sequences and the corresponding colors. See \n\
         https://handwiki.org/wiki/ANSI_escape_code#Colors for example. There nothing that this \n\
