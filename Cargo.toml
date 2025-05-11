@@ -4,9 +4,10 @@ description = """
 A CLI utility installed as "ansi" to quickly get ANSI escape sequences. Supports the most basic ones,
 like colors and styles as bold or italic.
 """
-version = "0.1.4"
+version = "0.2.0"
 authors = ["Philipp Schuster <phip1611@gmail.com>"]
-edition = "2018"
+edition = "2024"
+rust-version = "1.85.1"
 keywords = ["ansi", "vt100", "escape-sequences", "terminal"]
 categories = [ "command-line-utilities" ]
 readme = "README.md"
@@ -15,18 +16,35 @@ homepage = "https://github.com/phip1611/ansi-escape-sequences-cli"
 repository = "https://github.com/phip1611/ansi-escape-sequences-cli"
 documentation = "https://docs.rs/ansi-escape-sequences-cli"
 include = [
-    "src/**/*",
-    "Cargo.toml",
-    "Cargo.lock",
-    "README.md",
-    "LICSNESE",
-    "res"
+"src/**/*",
+"Cargo.toml",
+"Cargo.lock",
+"README.md",
+"LICSNESE",
+"res"
 ]
 
 [[bin]]
 name = "ansi"
 path = "src/main.rs"
 
+[profile.release]
+lto = true
+opt-level = "s"
+
 [dependencies]
-# library for the sequence codes
-ansi_term = "0.12.1"
+
+[dependencies.clap]
+version = "4.5.38"
+default-features = false
+features = [
+  "cargo",
+  "color",
+  "derive",
+  "error-context",
+  "help",
+  "std",
+  "suggestions",
+  "usage",
+  "wrap_help",
+]
