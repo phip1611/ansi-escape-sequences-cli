@@ -86,6 +86,39 @@ pub enum AnsiKeyword {
     /// White background color.
     BgWhite,
 
+    /// Gray foreground color.
+    Gray,
+    /// Gray background color.
+    BgGray,
+    /// Bright red foreground color.
+    BrightRed,
+    /// Bright red background color.
+    BgBrightRed,
+    /// Bright green foreground color.
+    BrightGreen,
+    /// Bright green background color.
+    BgBrightGreen,
+    /// Bright yellow foreground color.
+    BrightYellow,
+    /// Bright yellow background color.
+    BgBrightYellow,
+    /// Bright blue foreground color.
+    BrightBlue,
+    /// Bright blue background color.
+    BgBrightBlue,
+    /// Pink foreground color.
+    BrightMagenta,
+    /// Pink background color.
+    BgBrightMagenta,
+    /// Bright cyan foreground color.
+    BrightCyan,
+    /// Bright cyan background color.
+    BgBrightCyan,
+    /// Bright white foreground color.
+    BrightWhite,
+    /// Bright white background color.
+    BgBrightWhite,
+
     /// Reset/Clear all style.
     Clear,
     /// Reset/Clear all style.
@@ -130,6 +163,22 @@ impl AnsiKeyword {
             AnsiKeyword::BgCyan => "46",
             AnsiKeyword::White => "37",
             AnsiKeyword::BgWhite => "47",
+            AnsiKeyword::Gray => "90",
+            AnsiKeyword::BgGray => "100",
+            AnsiKeyword::BrightRed => "91",
+            AnsiKeyword::BgBrightRed => "101",
+            AnsiKeyword::BrightGreen => "92",
+            AnsiKeyword::BgBrightGreen => "102",
+            AnsiKeyword::BrightYellow => "93",
+            AnsiKeyword::BgBrightYellow => "103",
+            AnsiKeyword::BrightBlue => "94",
+            AnsiKeyword::BgBrightBlue => "104",
+            AnsiKeyword::BrightMagenta => "95",
+            AnsiKeyword::BgBrightMagenta => "105",
+            AnsiKeyword::BrightCyan => "96",
+            AnsiKeyword::BgBrightCyan => "106",
+            AnsiKeyword::BrightWhite => "97",
+            AnsiKeyword::BgBrightWhite => "107",
             AnsiKeyword::Clear | AnsiKeyword::Reset => "0",
             AnsiKeyword::Bold => "1",
             AnsiKeyword::Dimmed => "2",
