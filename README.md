@@ -13,5 +13,10 @@ which can be used on the Terminal to easily colorize/style your output.
 ## Install
 `$ cargo install ansi-escape-sequences-cli` (the binary is just called `ansi`!)
 
+## Supported Platforms
+- ✔️ Linux
+- ✔️ MacOS
+- ✔️ Windows
+
 ## MSRV
 Ths MSRV is `1.85.1`.
