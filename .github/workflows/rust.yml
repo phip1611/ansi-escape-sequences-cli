@@ -11,13 +11,14 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        runs-on: [ macos-latest, ubuntu-latest, windows-latest ]
         rust:
           - stable
           - nightly
           - 1.85.1 # MSVR
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
       # Important preparation step: override the latest default Rust version in GitHub CI
@@ -27,6 +28,9 @@ jobs:
           profile: default
           toolchain: ${{ matrix.rust }}
           override: true
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: "${{ matrix.runs-on }}-${{ matrix.rust }}"
       # helps to identify if the right cargo version is actually used
       - run: cargo version
       - name: Build
