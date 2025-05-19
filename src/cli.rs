@@ -23,6 +23,7 @@ SOFTWARE.
 */
 //! CLI parsing.
 
+use crate::to_ansi_escape_sequence;
 use clap::{Parser, ValueEnum};
 
 /// Determines how the special `ESC` symbol (character) is escaped in normal
@@ -58,69 +59,101 @@ impl EscEscapeStyle {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, ValueEnum)]
 pub enum AnsiKeyword {
     /// Black foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Black.to_help_text())]
     Black,
     /// Black background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBlack.to_help_text())]
     BgBlack,
     /// Red foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Red.to_help_text())]
     Red,
     /// Red background color.
+    #[value(help = crate::cli::AnsiKeyword::BgRed.to_help_text())]
     BgRed,
     /// Green foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Green.to_help_text())]
     Green,
     /// Green background color.
+    #[value(help = crate::cli::AnsiKeyword::BgGreen.to_help_text())]
     BgGreen,
     /// Yellow foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Yellow.to_help_text())]
     Yellow,
     /// Yellow background color.
+    #[value(help = crate::cli::AnsiKeyword::BgYellow.to_help_text())]
     BgYellow,
     /// Blue foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Blue.to_help_text())]
     Blue,
     /// Blue background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBlue.to_help_text())]
     BgBlue,
     /// Purple foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Magenta.to_help_text())]
     Magenta,
     /// Purple background color.
+    #[value(help = crate::cli::AnsiKeyword::BgMagenta.to_help_text())]
     BgMagenta,
     /// Cyan foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Cyan.to_help_text())]
     Cyan,
     /// Cyan background color.
+    #[value(help = crate::cli::AnsiKeyword::BgCyan.to_help_text())]
     BgCyan,
     /// White foreground color.
+    #[value(help = crate::cli::AnsiKeyword::White.to_help_text())]
     White,
     /// White background color.
+    #[value(help = crate::cli::AnsiKeyword::BgWhite.to_help_text())]
     BgWhite,
 
     /// Gray foreground color.
+    #[value(help = crate::cli::AnsiKeyword::Gray.to_help_text())]
     Gray,
     /// Gray background color.
+    #[value(help = crate::cli::AnsiKeyword::BgGray.to_help_text())]
     BgGray,
     /// Bright red foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightRed.to_help_text())]
     BrightRed,
     /// Bright red background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightRed.to_help_text())]
     BgBrightRed,
     /// Bright green foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightGreen.to_help_text())]
     BrightGreen,
     /// Bright green background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightGreen.to_help_text())]
     BgBrightGreen,
     /// Bright yellow foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightYellow.to_help_text())]
     BrightYellow,
     /// Bright yellow background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightYellow.to_help_text())]
     BgBrightYellow,
     /// Bright blue foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightBlue.to_help_text())]
     BrightBlue,
     /// Bright blue background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightBlue.to_help_text())]
     BgBrightBlue,
     /// Pink foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightMagenta.to_help_text())]
     BrightMagenta,
     /// Pink background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightMagenta.to_help_text())]
     BgBrightMagenta,
     /// Bright cyan foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightCyan.to_help_text())]
     BrightCyan,
     /// Bright cyan background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightCyan.to_help_text())]
     BgBrightCyan,
     /// Bright white foreground color.
+    #[value(help = crate::cli::AnsiKeyword::BrightWhite.to_help_text())]
     BrightWhite,
     /// Bright white background color.
+    #[value(help = crate::cli::AnsiKeyword::BgBrightWhite.to_help_text())]
     BgBrightWhite,
 
     /// Reset/Clear all style.
@@ -131,24 +164,90 @@ pub enum AnsiKeyword {
     // /// Normal font.
     // Normal,
     /// Bold font.
+    #[value(help = crate::cli::AnsiKeyword::Bold.to_help_text())]
     Bold,
     /// Dimmed font.
+    #[value(help = crate::cli::AnsiKeyword::Dimmed.to_help_text())]
     Dimmed,
     /// Italic font.
+    #[value(help = crate::cli::AnsiKeyword::Italic.to_help_text())]
     Italic,
     /// Underlined font.
+    #[value(help = crate::cli::AnsiKeyword::Underline.to_help_text())]
     Underline,
     /// Blinking font.
+    #[value(help = crate::cli::AnsiKeyword::Blink.to_help_text())]
     Blink,
     /// Hidden font.
+    #[value(help = crate::cli::AnsiKeyword::Hidden.to_help_text())]
     Hidden,
     /// Strikethrough font.
+    #[value(help = crate::cli::AnsiKeyword::Strike.to_help_text())]
     Strike,
     /// Strikethrough font.
+    #[value(help = crate::cli::AnsiKeyword::Strikethrough.to_help_text())]
     Strikethrough,
 }
 
 impl AnsiKeyword {
+    fn to_help_text(self) -> String {
+        match self {
+            AnsiKeyword::Black
+            | AnsiKeyword::Red
+            | AnsiKeyword::Green
+            | AnsiKeyword::Yellow
+            | AnsiKeyword::Blue
+            | AnsiKeyword::Magenta
+            | AnsiKeyword::Cyan
+            | AnsiKeyword::White
+            | AnsiKeyword::Gray
+            | AnsiKeyword::BrightRed
+            | AnsiKeyword::BrightGreen
+            | AnsiKeyword::BrightYellow
+            | AnsiKeyword::BrightBlue
+            | AnsiKeyword::BrightMagenta
+            | AnsiKeyword::BrightCyan
+            | AnsiKeyword::BrightWhite => {
+                let begin_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[self]);
+                let end_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[Self::Clear]);
+                format!("{begin_sequence}{self:?}{end_sequence} foreground color")
+            }
+            AnsiKeyword::BgBlack
+            | AnsiKeyword::BgRed
+            | AnsiKeyword::BgGreen
+            | AnsiKeyword::BgYellow
+            | AnsiKeyword::BgBlue
+            | AnsiKeyword::BgMagenta
+            | AnsiKeyword::BgCyan
+            | AnsiKeyword::BgWhite
+            | AnsiKeyword::BgGray
+            | AnsiKeyword::BgBrightRed
+            | AnsiKeyword::BgBrightGreen
+            | AnsiKeyword::BgBrightYellow
+            | AnsiKeyword::BgBrightBlue
+            | AnsiKeyword::BgBrightMagenta
+            | AnsiKeyword::BgBrightCyan
+            | AnsiKeyword::BgBrightWhite => {
+                let begin_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[self]);
+                let end_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[Self::Clear]);
+                format!("{begin_sequence}{self:?}{end_sequence} background color")
+            }
+            AnsiKeyword::Bold
+            | AnsiKeyword::Dimmed
+            | AnsiKeyword::Italic
+            | AnsiKeyword::Underline
+            | AnsiKeyword::Blink
+            | AnsiKeyword::Hidden
+            | AnsiKeyword::Strike
+            | AnsiKeyword::Strikethrough => {
+                let begin_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[self]);
+                let end_sequence = to_ansi_escape_sequence(EscEscapeStyle::Direct, &[Self::Clear]);
+                format!("{begin_sequence}{self:?}{end_sequence} font")
+            }
+            _ => unimplemented!("No help text for {self:?}"),
+        }
+    }
+
     /// Returns the ANSI code of the style.
     pub const fn to_ansi_code(self) -> &'static str {
         match self {
