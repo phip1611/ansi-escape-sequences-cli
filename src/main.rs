@@ -26,14 +26,38 @@ SOFTWARE.
 //! short, rather it is invoked often/multiple times. It can be used like this:
 //! `$ echo "$(ansi bg-green)Hello World $(ansi reset)$(ansi red)$(ansi bold)$(ansi underline)Red Warning$(ansi reset)"`
 
+use crate::cli::{AnsiKeyword, EscEscapeStyle};
 use clap::Parser;
 
 mod cli;
 
-const ESCAPE: &str = "\x1b";
-const ANSI_ESC_PREFIX: &str = "\x1b[";
-const ANSI_ESC_SUFFIX: &str = "m";
-const ANSI_ESP_SEP: char = ';';
+fn to_ansi_escape_sequence(
+    esc_encode_style: EscEscapeStyle,
+    ansi_keywords: &[AnsiKeyword],
+) -> String {
+    const ANSI_ESP_SEP: char = ';';
+    const ANSI_ESC_SUFFIX: &str = "m";
+
+    let prefix = {
+        let esc = esc_encode_style.escape_sequence();
+        format!("{esc}[")
+    };
+
+    let codes: String =
+        ansi_keywords
+            .iter()
+            .map(|ak| ak.to_ansi_code())
+            .fold(String::new(), |mut acc, next| {
+                if acc.is_empty() {
+                    acc.push_str(next);
+                } else {
+                    acc.push(ANSI_ESP_SEP);
+                    acc.push_str(next);
+                }
+                acc
+            });
+    format!("{prefix}{codes}{suffix}", suffix = ANSI_ESC_SUFFIX)
+}
 
 /// A CLI utility installed as "ansi" to quickly get ANSI escape sequences. Supports the most basic
 /// ones, like colors and styles as bold or italic. The lifecycle of this utility usually is really
@@ -41,27 +65,10 @@ const ANSI_ESP_SEP: char = ';';
 /// `$ echo "$(ansi bg-green)Hello World $(ansi reset)$(ansi red)$(ansi bold)$(ansi underline)Red Warning$(ansi reset)"`
 fn main() {
     let args = cli::Cli::parse();
-    let prefix = args
-        .escape_style
-        .map(|escape_style| {
-            let replace = escape_style.escape_sequence();
-            ANSI_ESC_PREFIX.replace(ESCAPE, replace)
-        })
-        .unwrap_or_else(|| ANSI_ESC_PREFIX.to_string());
-    let codes: String = args
-        .keywords
-        .into_iter()
-        .map(|ak| ak.to_ansi_sequence())
-        .fold(String::new(), |mut acc, next| {
-            if acc.is_empty() {
-                acc.push_str(next);
-            } else {
-                acc.push(ANSI_ESP_SEP);
-                acc.push_str(next);
-            }
-            acc
-        });
-    print!("{prefix}{codes}{ANSI_ESC_SUFFIX}");
+    print!(
+        "{}",
+        to_ansi_escape_sequence(args.escape_style, &args.keywords)
+    );
     if args.new_line {
         println!();
     }

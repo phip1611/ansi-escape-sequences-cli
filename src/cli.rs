@@ -25,10 +25,10 @@ SOFTWARE.
 
 use clap::{Parser, ValueEnum};
 
-/// Determines how the special `ESC` symbol (character) is encoded in normal
+/// Determines how the special `ESC` symbol (character) is escaped in normal
 /// ASCII characters before being printed to stdout.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, ValueEnum)]
-pub enum EscEncodeStyle {
+pub enum EscEscapeStyle {
     /// Use `\e` (Bash style) for encoding.
     #[default]
     Bash,
@@ -38,15 +38,19 @@ pub enum EscEncodeStyle {
     Unicode,
     /// Use `\u{1b}` (Rust unicode style) for encoding.
     UnicodeRust,
+    /// Print the `ESC` symbol as is and not encoded.
+    Direct,
 }
 
-impl EscEncodeStyle {
+impl EscEscapeStyle {
+    /// Returns the (encoded) ESC escape sequence.
     pub const fn escape_sequence(&self) -> &'static str {
         match self {
             Self::Bash => "\\e",
             Self::Hex => "\\x1b",
             Self::Unicode => "\\u001b",
             Self::UnicodeRust => "\\u{1b}",
+            Self::Direct => "\u{1b}",
         }
     }
 }
@@ -145,7 +149,8 @@ pub enum AnsiKeyword {
 }
 
 impl AnsiKeyword {
-    pub const fn to_ansi_sequence(self) -> &'static str {
+    /// Returns the ANSI code of the style.
+    pub const fn to_ansi_code(self) -> &'static str {
         match self {
             AnsiKeyword::Black => "30",
             AnsiKeyword::BgBlack => "40",
@@ -201,9 +206,9 @@ pub struct Cli {
     /// Add a trailing new-line character (`\n`) to the command output.
     #[arg(short = 'n', long)]
     pub new_line: bool,
-    /// If set, determines the style to encode the `ESC` symbol.
-    #[arg(short = 'e', long)]
-    pub escape_style: Option<EscEncodeStyle>,
+    /// Determines the style to encode the `ESC` symbol.
+    #[arg(long, value_enum, default_value_t)]
+    pub escape_style: EscEscapeStyle,
     /// ANSI escape sequences. Please note that not all combination makes
     /// sense.
     #[arg(required = true)]
