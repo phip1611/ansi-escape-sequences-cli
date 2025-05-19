@@ -1,12 +1,17 @@
 # 'ansi' - a CLI utility to quickly get ANSI escape codes
-This Rust project called `ansi-escape-sequences-cli` provides an executable called `ansi`
-which can be used on the Terminal to easily colorize/style your output.
+
+`ansi-escape-sequences-cli` provides an executable called `ansi` which can be
+used in a shell or in a shell script to easily colorize and style terminal
+output.
 
 ## Usage
 - Add `ansi` to your `PATH`
 - Embed it in your shell scripts like this:
   ```bash
-  echo "$(ansi yellow bold)WARNING$(ansi reset): There was a problem"
+  # You need "-e" to let echo replace the escaped ESC symbol
+  echo -e "$(ansi yellow bold)WARNING$(ansi reset): There was a problem"
+  # Or use echo without "-e":
+  echo "$(ansi yellow bold --escape-style=direct)WARNING$(ansi reset): There was a problem"
   ```
 - Type `--help` for more guidance!
 
