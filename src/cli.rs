@@ -306,7 +306,7 @@ pub struct Cli {
     #[arg(short = 'n', long)]
     pub new_line: bool,
     /// Determines the style to encode the `ESC` symbol.
-    #[arg(long, value_enum, default_value_t)]
+    #[arg(short = 'e', long, value_enum, default_value_t)]
     pub escape_style: EscEscapeStyle,
     /// ANSI escape sequences. Please note that not all combination makes
     /// sense.
