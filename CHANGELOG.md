@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.2.3 (2026-03-30)
+- Added `-e` as shorthand for `--escape-style`
+
 ## v0.2.2 (2025-05-19)
 - Fixes wrong behaviour that was introduced since the crate switched to `clap`
 

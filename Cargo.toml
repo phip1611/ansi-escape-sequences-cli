@@ -4,7 +4,7 @@ description = """
 CLI tool for generating and applying ANSI escape sequences to colorize and style
 terminal output — ideal for scripts, prompts, and debugging.
 """
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Philipp Schuster <phip1611@gmail.com>"]
 edition = "2024"
 rust-version = "1.85.1"
